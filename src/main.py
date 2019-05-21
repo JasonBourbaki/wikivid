@@ -49,4 +49,6 @@ tempTrue = []
 for temp in temprop:
     tempTrue.append(audioLen*(temp/sum))
 
+
+
 #Processing the intro section into a mp3 file
