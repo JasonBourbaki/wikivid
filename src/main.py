@@ -2,6 +2,8 @@ import requests
 from gtts import gTTS
 from googletrans import Translator
 from bs4 import BeautifulSoup
+import wave
+import contextlib
 import spice as sp
 import imgextract as ie
 
@@ -25,13 +27,26 @@ link = stem + '/wiki/' + key.replace(" ", "_")
 response = requests.get(link)
 soup = BeautifulSoup(response.text, 'lxml')
 text = sp.textify(BeautifulSoup(sp.get_urls(soup), 'lxml'))
+
+tts = gTTS(text, lang = langlib.get(lang))
+tts.save('sound.wav')
+
 textwURL = sp.tokenize_urls(sp.get_urls(soup).split(' '))
 og = sp.get_content(soup)
-segments = ie.segmentize(textwURL, langlib.get(lang)).get('urls')
-print(segments)
-relevURL = ie.relev(segments, og, stem)
-# imgs = ie.extract(textwURL)
+temprop = ie.extract(textwURL, key, og, stem)
+
+sum = 0
+for temp in temprop:
+    sum += temp
+
+audioLen = 0
+with contextlib.closing(wave.open('sound.wav','r')) as f:
+    frames = f.getnframes()
+    rate = f.getframerate()
+    audioLen = frames / float(rate)
+
+tempTrue = []
+for temp in temprop:
+    tempTrue.append(audioLen*(temp/sum))
 
 #Processing the intro section into a mp3 file
-tts = gTTS(text, lang = langlib.get(lang))
-tts.save('sound.mp3')
