@@ -28,6 +28,16 @@ def get_urls(soup):
             break
     return textwURL
 
+def get_content(soup):
+    bodyText = ''
+    body = soup.find('div', {'class': 'mw-parser-output'})
+    tags = body.findAll('p')
+    for tag in tags:
+        text = rmv_parens(tag.text)
+        text = re.sub('\[.*?\]','', text)
+        bodyText += text + ' '
+    return bodyText
+
 #Tokenize the element into words and individual links
 def tokenize_urls(list):
     urlList = []
