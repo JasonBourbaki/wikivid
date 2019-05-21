@@ -1,5 +1,7 @@
 import re
 
+#Remove parenthesis (that's how you spell right?) from the summary, as they often contain different pronounciations or
+#denominations of the same word, irrelevant to the main content.
 def rmv_parens(text):
     n = 1
     while n:
@@ -8,6 +10,7 @@ def rmv_parens(text):
     text = re.sub(r'\s([?.,!"](?:\s|$))', r'\1', text)
     return text
 
+#Get the elements inside the summary section contained within a wikipedia HTML source
 def get_urls(soup):
     textwURL = ''
     body = soup.find('div', {'class': 'mw-parser-output'})
@@ -25,6 +28,7 @@ def get_urls(soup):
             break
     return textwURL
 
+#Tokenize the element into words and individual links
 def tokenize_urls(list):
     urlList = []
     link = ''
@@ -41,6 +45,7 @@ def tokenize_urls(list):
             pass
     return urlList
 
+#Parse <a> tags in summary section into a text paragraph
 def textify(tag):
     for a in tag.findAll('a'):
         a.replaceWithChildren()

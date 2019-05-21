@@ -3,8 +3,8 @@ from gtts import gTTS
 from googletrans import Translator
 from bs4 import BeautifulSoup
 import spice as sp
+import imgextract as ie
 
-SECTION_LEN = 30
 translator = Translator()
 htp = 'https://'
 urlstem = '.wikipedia.org/wiki/'
@@ -25,6 +25,9 @@ response = requests.get(link)
 soup = BeautifulSoup(response.text, 'lxml')
 text = sp.textify(BeautifulSoup(sp.get_urls(soup), 'lxml'))
 textwURL = sp.tokenize_urls(sp.get_urls(soup).split(' '))
+ie.segmentize(textwURL, langlib.get(lang))
+# imgs = ie.extract(textwURL)
+
 
 print(textwURL)
 
